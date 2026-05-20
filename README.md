@@ -1,6 +1,14 @@
 ![Allure Report](screenshots/allure-report.png)
 
 
+
+## Технологии 
+- Java 17
+- Maven
+- JUnit 5
+- Allure Report
+
+  
 ## Реализованные тесты
 
 ### Positive tests
@@ -22,6 +30,19 @@
 mvn clean test
 ```
 
+## Запуск тестов по тегам
+
+### Positive tests
+
+```bash
+mvn test -Dgroups=positive
+```
+
+### Negative tests
+
+```bash
+mvn test -Dgroups=negative
+```
 ---
 
 ## Генерация Allure отчета
