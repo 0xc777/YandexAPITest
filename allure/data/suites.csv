@@ -1,0 +1,2 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"passed","Mon Aug 03 02:26:48 UTC 2026","Mon Aug 03 02:26:52 UTC 2026","3681","","integration.tests.YandexTests","","integration.tests.YandexTests","shouldGetDiskInfo","Получить информацию о диске","Получение информации о диске (проверка статуса и наличия поля trash_size)"
