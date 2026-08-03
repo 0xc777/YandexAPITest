@@ -22,19 +22,33 @@ jobs:
           java-version: '17'
           cache: 'maven'
 
+      # 1. Устанавливаем Allure 
+      - name: Install Allure
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y allure
+
+      # 2. Запускаем тесты
       - name: Run tests
         env:
           YANDEX_TOKEN: ${{ secrets.YANDEX_TOKEN }}
         run: mvn clean test
 
+      # 3. Проверяем, что результаты создались 
+      - name: Check allure-results folder
+        if: always()
+        run: |
+          ls -la target/allure-results || echo "Folder not found"
+
+      # 4. Сохраняем сырые результаты как артефакт
       - name: Upload Allure results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5   # обновлено с v4 на v5
         with:
           name: allure-results
           path: target/allure-results
 
-      
+      # 5. Генерируем HTML-отчёт
       - name: Generate Allure Report
         if: always()
         uses: simple-elf/allure-report-action@v1
@@ -42,10 +56,14 @@ jobs:
           allure_results: target/allure-results
           allure_report: allure-report
 
+      # 6. Деплоим на GitHub Pages
       - name: Deploy Allure Report to GitHub Pages
         if: always()
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4   # обновлено с v3 на v4
         with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: allure-report
+          destination_dir: allure
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: allure-report
           destination_dir: allure
