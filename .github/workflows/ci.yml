@@ -22,39 +22,26 @@ jobs:
           java-version: '17'
           cache: 'maven'
 
-      - name: Install Allure
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y allure
-
       - name: Run tests
         env:
           YANDEX_TOKEN: ${{ secrets.YANDEX_TOKEN }}
         run: mvn clean test
 
-      - name: Check allure-results folder
+      - name: Generate Allure Report via Maven
         if: always()
-        run: |
-          ls -la target/allure-results || echo "Folder not found"
+        run: mvn allure:report
 
-      - name: Upload Allure results
+      - name: Upload Allure Report
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
-          name: allure-results
-          path: target/allure-results
+          name: allure-report
+          path: target/site/allure-maven-plugin
 
-      - name: Generate Allure Report
+      - name: Deploy to GitHub Pages
         if: always()
-        uses: simple-elf/allure-report-action@v1
-        with:
-          allure_results: target/allure-results
-          allure_report: allure-report
-
-      - name: Deploy Allure Report to GitHub Pages
-        if: always()
-        uses: peaceiris/actions-gh-pages@v4
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: allure-report
+          publish_dir: target/site/allure-maven-plugin
           destination_dir: allure
