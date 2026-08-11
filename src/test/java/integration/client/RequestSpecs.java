@@ -13,7 +13,6 @@ public class RequestSpecs
 {
     private static final RequestSpecification REQUEST_SPEC = new RequestSpecBuilder()
             .setBaseUri(Config.BASE_URL)
-            .setBaseUri(Config.BASE_URL)
             .addHeader("Authorization", "OAuth " + Config.TOKEN)
             .setContentType("application/json")
             .setConfig(RestAssured.config()  // <-- ЯВНО ПЕРЕДАЁМ КОНФИГ
