@@ -24,7 +24,6 @@ public class YandexSmokeTest {
     @Story("Диск")
     void shouldAuthorizeSuccessfully(){
         given()
-                .filter(new AllureRestAssured())
                 .spec(get())
         .when()
                 .get("/v1/disk")
@@ -41,7 +40,6 @@ public class YandexSmokeTest {
     void CreateAndDeleteFolder(){
         String folderPath = "/smoke_test_" + System.currentTimeMillis();
         given()
-                .filter(new AllureRestAssured())
                 .spec(get())
                 .queryParam("path", folderPath)
         .when()
@@ -51,7 +49,6 @@ public class YandexSmokeTest {
 
         // Удаление
         given()
-                .filter(new AllureRestAssured())
                 .spec(get())
                 .queryParam("path", folderPath)
         .when()
@@ -68,7 +65,6 @@ public class YandexSmokeTest {
     @Story("Диск")
     void HaveAvailableSpace(){
         given()
-                .filter(new AllureRestAssured())
                 .spec(get())
         .when()
                 .get("/v1/disk")
