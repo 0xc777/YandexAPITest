@@ -1,8 +1,13 @@
 package integration.client;
 
+import io.qameta.allure.restassured.AllureRestAssured;
+import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.config.LogConfig;
 import io.restassured.specification.RequestSpecification;
 import integration.utils.Config;
+
+import java.util.List;
 
 public class RequestSpecs
 {
@@ -11,6 +16,11 @@ public class RequestSpecs
             .setBaseUri(Config.BASE_URL)
             .addHeader("Authorization", "OAuth " + Config.TOKEN)
             .setContentType("application/json")
+            .setConfig(RestAssured.config()  // <-- ЯВНО ПЕРЕДАЁМ КОНФИГ
+                    .logConfig(LogConfig
+                            .logConfig()
+                            .blacklistHeaders(List.of("Authorization"))))
+            .addFilter(new AllureRestAssured())
             .build();
 
     public static RequestSpecification get() {
