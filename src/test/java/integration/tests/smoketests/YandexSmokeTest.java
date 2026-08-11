@@ -25,12 +25,10 @@ public class YandexSmokeTest {
     void shouldAuthorizeSuccessfully(){
         given()
                 .filter(new AllureRestAssured())
-                .log().ifValidationFails()
                 .spec(get())
         .when()
                 .get("/v1/disk")
         .then()
-                .log().ifValidationFails()
                 .statusCode(200);
 
     }
@@ -44,25 +42,21 @@ public class YandexSmokeTest {
         String folderPath = "/smoke_test_" + System.currentTimeMillis();
         given()
                 .filter(new AllureRestAssured())
-                .log().ifValidationFails()
                 .spec(get())
                 .queryParam("path", folderPath)
         .when()
                 .put("/v1/disk/resources")
         .then()
-                .log().ifValidationFails()
                 .statusCode(201);
 
         // Удаление
         given()
                 .filter(new AllureRestAssured())
-                .log().ifValidationFails()
                 .spec(get())
                 .queryParam("path", folderPath)
         .when()
                 .delete("/v1/disk/resources")
         .then()
-                .log().ifValidationFails()
                 .statusCode(204);
     }
 
@@ -75,12 +69,10 @@ public class YandexSmokeTest {
     void HaveAvailableSpace(){
         given()
                 .filter(new AllureRestAssured())
-                .log().ifValidationFails()
                 .spec(get())
         .when()
                 .get("/v1/disk")
         .then()
-                .log().ifValidationFails()
                 .statusCode(200)
                 .body("total_space", greaterThan(0L));
     }
