@@ -19,7 +19,6 @@ public class Config {
                     "YANDEX_TOKEN is missing"
             );
         }
-        RestAssured.config = RestAssured.config()
-                .logConfig(LogConfig.logConfig().blacklistHeaders(List.of("Authorization")));
+
     }
 }
