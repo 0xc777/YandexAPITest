@@ -7,9 +7,9 @@ import io.qameta.allure.Story;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import java.io.RandomAccessFile;
-import java.io.File;
+
 import java.io.IOException;
+import java.util.UUID;
 
 import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.is;
@@ -64,7 +64,7 @@ public class YandexNegativeTest {
     void Return404WhenFolderNotFound(){
         given()
                 .spec(get())
-                .queryParam("path", "/non_existent_folder_" + System.currentTimeMillis())
+                .queryParam("path", "/non_existent_folder_" + UUID.randomUUID())
         .when()
                 .get("/v1/disk/resources")
         .then()
@@ -78,7 +78,7 @@ public class YandexNegativeTest {
     @DisplayName("Создание уже существующей папки")
     @Story("Ресурсы")
     void Return409WhenFolderAlreadyExists(){
-        String folderPath = "/negative_test_" + System.currentTimeMillis();
+        String folderPath = "/negative_test_" + UUID.randomUUID();
         given()
                 .spec(get())
                 .queryParam("path", folderPath)
@@ -112,7 +112,7 @@ public class YandexNegativeTest {
     void Return404WhenDeletingNonExistentFolder(){
         given()
                 .spec(get())
-                .queryParam("path", "/non_existent_folder_" + System.currentTimeMillis())
+                .queryParam("path", "/non_existent_folder_" + UUID.randomUUID())
                 .queryParam("permanently", true)
         .when()
                 .delete("/v1/disk/resources")
@@ -141,8 +141,8 @@ public class YandexNegativeTest {
     @DisplayName("Копирование в несуществующую папку")
     @Story("Ресурсы")
     void FailToCopyWhenTargetFolderNotExists() throws IOException {
-        String sourcePath = "/source_file_" + System.currentTimeMillis() + ".txt";
-        String targetPath = "/non_existent_folder_" + System.currentTimeMillis() + "/copy_file.txt";
+        String sourcePath = "/source_file_" + UUID.randomUUID() + ".txt";
+        String targetPath = "/non_existent_folder_" + UUID.randomUUID() + "/copy_file.txt";
         try {
             String uploadUrl = given()
                     .spec(get())
@@ -177,6 +177,13 @@ public class YandexNegativeTest {
                     .delete("/v1/disk/resources")
             .then()
                     .statusCode(anyOf(is(204), is(404)));
+            given()
+                    .spec(get())
+                    .queryParam("path", sourcePath)
+            .when()
+                    .get("/v1/disk/resources")
+            .then()
+                    .statusCode(404);
         }
     }
 

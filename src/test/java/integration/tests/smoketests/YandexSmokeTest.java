@@ -8,6 +8,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import java.awt.image.ImagingOpException;
+import java.util.UUID;
+
 import static io.restassured.RestAssured.given;
 import static integration.client.RequestSpecs.get;
 import static org.hamcrest.Matchers.greaterThan;
@@ -20,7 +23,7 @@ public class YandexSmokeTest {
     @Description("Получение информации о диске")
     @DisplayName("Получить информацию о диске")
     @Story("Авторизация")
-    void shouldAuthorizeSuccessfully(){
+    void AuthorizeSuccessfully(){
         given()
                 .spec(get())
         .when()
@@ -35,8 +38,9 @@ public class YandexSmokeTest {
     @Description("Создание папки на диске")
     @DisplayName("Создание папки на диске")
     @Story("Ресурсы")
-    void CreateAndDeleteFolder(){
-        String folderPath = "/smoke_test_" + System.currentTimeMillis();
+    void CreateAndDeleteFolder()throws ImagingOpException {
+        String folderPath = "/smoke_test_" + UUID.randomUUID();
+        try {
         given()
                 .spec(get())
                 .queryParam("path", folderPath)
@@ -45,14 +49,17 @@ public class YandexSmokeTest {
         .then()
                 .statusCode(201);
 
-        // Удаление
-        given()
-                .spec(get())
-                .queryParam("path", folderPath)
-        .when()
-                .delete("/v1/disk/resources")
-        .then()
-                .statusCode(204);
+        }
+        finally {
+            given()
+                    .spec(get())
+                    .queryParam("path", folderPath)
+            .when()
+                    .delete("/v1/disk/resources")
+            .then()
+                    .statusCode(204);
+        }
+
     }
 
     @Test
