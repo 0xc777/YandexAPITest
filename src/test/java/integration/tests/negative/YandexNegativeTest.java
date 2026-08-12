@@ -7,7 +7,7 @@ import io.qameta.allure.Story;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-
+import static integration.constants.Endpoints.*;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -33,7 +33,7 @@ public class YandexNegativeTest {
                 .baseUri(BASE_URL)
                 .contentType("application/json")
         .when()
-                .get("/v1/disk")
+                .get(DISK)
         .then()
                 .statusCode(401);
 
@@ -50,7 +50,7 @@ public class YandexNegativeTest {
                 .header("Authorization", "OAuth invalid_token")
                 .contentType("application/json")
         .when()
-                .get("/v1/disk")
+                .get(DISK)
         .then()
                 .statusCode(401);
     }
@@ -66,7 +66,7 @@ public class YandexNegativeTest {
                 .spec(get())
                 .queryParam("path", "/non_existent_folder_" + UUID.randomUUID())
         .when()
-                .get("/v1/disk/resources")
+                .get(RESOURCES)
         .then()
                 .statusCode(404);
     }
@@ -83,14 +83,14 @@ public class YandexNegativeTest {
                 .spec(get())
                 .queryParam("path", folderPath)
         .when()
-                .put("/v1/disk/resources")
+                .put(RESOURCES)
         .then()
                 .statusCode(201);
         given()
                 .spec(get())
                 .queryParam("path", folderPath)
         .when()
-                .put("/v1/disk/resources")
+                .put(RESOURCES)
         .then()
                 .statusCode(409);
         given()
@@ -98,7 +98,7 @@ public class YandexNegativeTest {
                 .queryParam("path", folderPath)
                 .queryParam("permanently", true)
         .when()
-                .delete("/v1/disk/resources")
+                .delete(RESOURCES)
         .then()
                 .statusCode(204);
 
@@ -115,7 +115,7 @@ public class YandexNegativeTest {
                 .queryParam("path", "/non_existent_folder_" + UUID.randomUUID())
                 .queryParam("permanently", true)
         .when()
-                .delete("/v1/disk/resources")
+                .delete(RESOURCES)
         .then()
                 .statusCode(404);
     }
@@ -130,7 +130,7 @@ public class YandexNegativeTest {
                 .spec(get())
                 .queryParam("path", "")
         .when()
-                .put("/v1/disk/resources")
+                .put(RESOURCES)
         .then()
                 .statusCode(400);
     }
@@ -148,7 +148,7 @@ public class YandexNegativeTest {
                     .spec(get())
                     .queryParam("path", sourcePath)
             .when()
-                    .get("/v1/disk/resources/upload")
+                    .get(UPLOAD)
             .then()
                     .statusCode(200)
                     .extract()
@@ -164,7 +164,7 @@ public class YandexNegativeTest {
                     .queryParam("from", sourcePath)
                     .queryParam("path", targetPath)
             .when()
-                    .post("/v1/disk/resources/copy")
+                    .post(COPY)
             .then()
                     .statusCode(409);
         }
@@ -174,14 +174,14 @@ public class YandexNegativeTest {
                     .queryParam("path", sourcePath)
                     .queryParam("permanently", true)
             .when()
-                    .delete("/v1/disk/resources")
+                    .delete(RESOURCES)
             .then()
                     .statusCode(anyOf(is(204), is(404)));
             given()
                     .spec(get())
                     .queryParam("path", sourcePath)
             .when()
-                    .get("/v1/disk/resources")
+                    .get(RESOURCES)
             .then()
                     .statusCode(404);
         }

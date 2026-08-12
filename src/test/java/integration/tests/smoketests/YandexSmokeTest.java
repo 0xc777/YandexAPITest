@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.awt.image.ImagingOpException;
 import java.util.UUID;
-
+import static integration.constants.Endpoints.*;
 import static io.restassured.RestAssured.given;
 import static integration.client.RequestSpecs.get;
 import static org.hamcrest.Matchers.greaterThan;
@@ -27,7 +27,7 @@ public class YandexSmokeTest {
         given()
                 .spec(get())
         .when()
-                .get("/v1/disk")
+                .get(DISK)
         .then()
                 .statusCode(200);
 
@@ -45,7 +45,7 @@ public class YandexSmokeTest {
                 .spec(get())
                 .queryParam("path", folderPath)
         .when()
-                .put("/v1/disk/resources")
+                .put(RESOURCES)
         .then()
                 .statusCode(201);
 
@@ -55,7 +55,7 @@ public class YandexSmokeTest {
                     .spec(get())
                     .queryParam("path", folderPath)
             .when()
-                    .delete("/v1/disk/resources")
+                    .delete(RESOURCES)
             .then()
                     .statusCode(204);
         }
@@ -72,7 +72,7 @@ public class YandexSmokeTest {
         given()
                 .spec(get())
         .when()
-                .get("/v1/disk")
+                .get(DISK)
         .then()
                 .statusCode(200)
                 .body("total_space", greaterThan(0L));
