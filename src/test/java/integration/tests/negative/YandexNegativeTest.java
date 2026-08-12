@@ -187,5 +187,21 @@ public class YandexNegativeTest {
         }
     }
 
+    @Test
+    @Tag("negative")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("Восстановление несуществующего файла 404")
+    @DisplayName("Восстановление несуществующего файла ")
+    @Story("Корзина")
+    void Return404RestoreNonExistentFile() {
+        String path = "/non_existent_" + System.currentTimeMillis() + ".txt";
 
+        given()
+                .spec(get())
+                .queryParam("path", path)
+        .when()
+                .put(TRASH_RESTORE)
+        .then()
+                .statusCode(404);
+    }
 }

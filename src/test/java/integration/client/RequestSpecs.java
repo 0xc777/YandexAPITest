@@ -15,7 +15,7 @@ public class RequestSpecs
             .setBaseUri(Config.BASE_URL)
             .addHeader("Authorization", "OAuth " + Config.TOKEN)
             .setContentType("application/json")
-            .setConfig(RestAssured.config()  // <-- ЯВНО ПЕРЕДАЁМ КОНФИГ
+            .setConfig(RestAssured.config()
                     .logConfig(LogConfig
                             .logConfig()
                             .blacklistHeaders(List.of("Authorization"))))
