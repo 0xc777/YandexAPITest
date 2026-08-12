@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import static integration.constants.Endpoints.*;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.anyOf;
@@ -122,7 +123,7 @@ public class YandexNegativeTest {
     @Test
     @Tag("negative")
     @Severity(SeverityLevel.MINOR)
-    @Description("Пустой путь при создании папки возвращает 400")
+    @Description("Пустой путь при создании папки 400")
     @DisplayName("Пустой путь при создании папки")
     @Story("Ресурсы")
     void Return400WhenEmptyPath(){
@@ -194,7 +195,7 @@ public class YandexNegativeTest {
     @DisplayName("Восстановление несуществующего файла ")
     @Story("Корзина")
     void Return404RestoreNonExistentFile() {
-        String path = "/non_existent_" + System.currentTimeMillis() + ".txt";
+        String path = "/non_existent_" + UUID.randomUUID() + ".txt";
 
         given()
                 .spec(get())
@@ -203,5 +204,111 @@ public class YandexNegativeTest {
                 .put(TRASH_RESTORE)
         .then()
                 .statusCode(404);
+    }
+
+    @Test
+    @Tag("negative")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("Публикация несуществующего ресурса 404")
+    @DisplayName("Публикация несуществующего ресурса")
+    @Story("Публикация")
+    void Return404PublishNonExistentResource() {
+        String path = "/non_existent_" + UUID.randomUUID();
+
+        given()
+                .spec(get())
+                .queryParam("path", path)
+        .when()
+                .put(PUBLISH)
+        .then()
+                .statusCode(404);
+    }
+    @Test
+    @Tag("negative")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("Удаление публикации несуществующего ресурса  405")
+    @DisplayName("Удаление публикации несуществующего ресурса")
+    @Story("Публикация")
+    void Return404NonPublishedResource() {
+        String path = "/non_existent_" +  UUID.randomUUID();
+
+        given()
+                .spec(get())
+                .queryParam("path", path)
+        .when()
+                .delete(PUBLISH)
+        .then()
+                .statusCode(405);
+    }
+    @Test
+    @Tag("negative")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("Копирование поверх существующего файла без overwrite 409")
+    @DisplayName("Копирование поверх существующего файла без overwrite")
+    @Story("Ресурсы")
+    void shouldReturn409WhenCopyOverExistingFileWithoutOverwrite()  throws IOException {
+        String sourcePath = "/source_" + UUID.randomUUID() + ".txt";
+        String targetPath = "/target_" + UUID.randomUUID() + ".txt";
+
+        try {
+
+            String uploadUrl = given()
+                    .spec(get())
+                    .queryParam("path", sourcePath)
+            .when()
+                    .get(UPLOAD)
+            .then()
+                    .statusCode(200)
+                    .extract()
+                    .path("href");
+
+            given()
+                    .body("source content".getBytes())
+            .when()
+                    .put(uploadUrl)
+            .then()
+                    .statusCode(201);
+
+
+            String targetUploadUrl = given()
+                    .spec(get())
+                    .queryParam("path", targetPath)
+            .when()
+                    .get(UPLOAD)
+            .then()
+                    .statusCode(200)
+                    .extract()
+                    .path("href");
+
+            given()
+                    .body("target content".getBytes())
+                    .when()
+                    .put(targetUploadUrl)
+                    .then()
+                    .statusCode(201);
+
+
+            given()
+                    .spec(get())
+                    .queryParam("from", sourcePath)
+                    .queryParam("path", targetPath)
+            .when()
+                    .post(COPY)
+            .then()
+                    .statusCode(409);
+
+        } finally {
+
+            for (String path : Arrays.asList(sourcePath, targetPath)) {
+                given()
+                        .spec(get())
+                        .queryParam("path", path)
+                        .queryParam("permanently", true)
+                .when()
+                        .delete(RESOURCES)
+                .then()
+                        .statusCode(anyOf(is(204), is(404)));
+            }
+        }
     }
 }
