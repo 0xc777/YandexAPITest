@@ -54,6 +54,7 @@ public class YandexSmokeTest {
             given()
                     .spec(get())
                     .queryParam("path", folderPath)
+                    .queryParam("permanently", true)
             .when()
                     .delete(RESOURCES)
             .then()
