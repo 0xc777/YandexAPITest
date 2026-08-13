@@ -1,5 +1,6 @@
 package integration.tests.smoketests;
 
+import integration.tests.steps.FolderSteps;
 import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
@@ -23,7 +24,7 @@ public class YandexSmokeTest {
     @Description("Получение информации о диске")
     @DisplayName("Получить информацию о диске")
     @Story("Авторизация")
-    void AuthorizeSuccessfully(){
+    void authorizeSuccessfully(){
         given()
                 .spec(get())
         .when()
@@ -37,39 +38,24 @@ public class YandexSmokeTest {
     @Severity(SeverityLevel.CRITICAL)
     @Description("Создание папки на диске")
     @DisplayName("Создание папки на диске")
-    @Story("Ресурсы")
-    void CreateAndDeleteFolder()throws ImagingOpException {
+    @Story("Папки")
+    void createAndDeleteFolder()throws ImagingOpException {
         String folderPath = "/smoke_test_" + UUID.randomUUID();
+        FolderSteps Folder = new FolderSteps();
         try {
-        given()
-                .spec(get())
-                .queryParam("path", folderPath)
-        .when()
-                .put(RESOURCES)
-        .then()
-                .statusCode(201);
-
+            Folder.createFolder(folderPath);
+        } finally {
+            Folder.deleteFolder(folderPath);
+            Folder.FolderNotExists(folderPath);
         }
-        finally {
-            given()
-                    .spec(get())
-                    .queryParam("path", folderPath)
-                    .queryParam("permanently", true)
-            .when()
-                    .delete(RESOURCES)
-            .then()
-                    .statusCode(204);
-        }
-
     }
-
     @Test
     @Tag("Smoke")
     @Severity(SeverityLevel.CRITICAL)
     @Description("Общий объем диска больше нуля")
     @DisplayName("Общий объем диска больше нуля")
     @Story("Ресурсы")
-    void HaveAvailableSpace(){
+    void haveAvailableSpace(){
         given()
                 .spec(get())
         .when()

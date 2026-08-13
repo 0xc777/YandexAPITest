@@ -28,7 +28,7 @@ public class YandexPositiveParamTest {
     @Severity(SeverityLevel.NORMAL)
     @Description("Загрузка файлов разных типов")
     @DisplayName("Загрузка файлов разных расширений → 201")
-    @Story("Ресурсы")
+    @Story("Файлы")
     void LoadingFilesOfDifferentTypes(String extension) throws IOException {
         String fileName = "upload_test_" + UUID.randomUUID() + "." + extension;
         String filePath = "/" + fileName;
@@ -84,7 +84,7 @@ public class YandexPositiveParamTest {
     @Tag("positive")
     @Severity(SeverityLevel.NORMAL)
     @DisplayName("Создание папки с разными допустимыми именами и пробелами 201")
-    @Story("Ресурсы")
+    @Story("Папки")
     void CreateFolderWithCyrillicAndSpaces(String folderName) {
         String path = "/" + folderName + "_" + System.currentTimeMillis();
 
@@ -132,26 +132,26 @@ public class YandexPositiveParamTest {
             String uploadUrl = given()
                     .spec(get())
                     .queryParam("path", filePath)
-                    .when()
+            .when()
                     .get(UPLOAD)
-                    .then()
+            .then()
                     .statusCode(200)
                     .extract()
                     .path("href");
 
             given()
                     .body(tempFile)
-                    .when()
+            .when()
                     .put(uploadUrl)
-                    .then()
+            .then()
                     .statusCode(201);
 
             given()
                     .spec(get())
                     .queryParam("path", filePath)
-                    .when()
+            .when()
                     .get(RESOURCES)
-                    .then()
+            .then()
                     .statusCode(200)
                     .body("name", equalTo(filePath.substring(filePath.lastIndexOf("/") + 1)));
 
@@ -160,9 +160,9 @@ public class YandexPositiveParamTest {
                     .spec(get())
                     .queryParam("path", filePath)
                     .queryParam("permanently", true)
-                    .when()
+            .when()
                     .delete(RESOURCES)
-                    .then()
+            .then()
                     .statusCode(anyOf(is(204), is(404)));
 
             try {
