@@ -1,21 +1,19 @@
 package integration.tests.steps;
 
-import integration.tests.dto.LinkResponse;
-import integration.tests.dto.ResourceMetadataResponse;
+import integration.tests.dto.*;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static integration.client.RequestSpecs.get;
 import static integration.constants.Endpoints.*;
 import static integration.utils.AsyncOperationHelper.waitForOperationComplete;
 import static io.restassured.RestAssured.given;
 import static org.awaitility.Awaitility.await;
-import static org.hamcrest.Matchers.anyOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.core.IsEqual.equalTo;
+
 
 public class FileSteps {
 
@@ -36,44 +34,28 @@ public class FileSteps {
     }
 
     @Step("Загрузить файл по ссылке")
-    public void uploadFileByLink(String uploadUrl, byte[] content) {
-        given()
+    public Response uploadFileByLink(String uploadUrl, byte[] content) {
+        return given()
                 .body(content)
         .when()
                 .put(uploadUrl)
         .then()
-                .statusCode(201);
+                .extract()
+                .response();
     }
 
     @Step("Загрузить файл {filePath} с содержимым")
-    public void uploadFile(String filePath, byte[] content) {
+    public Response uploadFile(String filePath, byte[] content) {
         String uploadUrl = getUploadLink(filePath);
-        uploadFileByLink(uploadUrl, content);
+        return uploadFileByLink(uploadUrl, content);
     }
 
-    @Step("Скопировать ресурс из {fromPath} в {toPath}")
-    public void copyResource(String fromPath, String toPath) {
-        Response response = given()
-                .spec(get())
-                .queryParam("from", fromPath)
-                .queryParam("path", toPath)
-        .when()
-                .post(COPY)
-        .then()
-                .statusCode(anyOf(is(201), is(202)))
-                .extract()
-                .response();
 
-        if (response.statusCode() == 202) {
-            String operationId = response.jsonPath().getString("operation_id");
-            if (operationId != null) {
-                waitForOperationComplete(operationId);
-            }
-        }
-    }
 
-    @Step("Проверить, что файл {filePath} существует и имеет имя {fileName} и тип file")
-    public void assertFileExists(String filePath, String fileName) {
+    @Step("Поиск файла{filePath}")
+    public Response searchFile(String filePath) {
+        AtomicReference<Response> responseRef = new AtomicReference<>();
+
         await()
                 .atMost(5, TimeUnit.SECONDS)
                 .pollInterval(500, TimeUnit.MILLISECONDS)
@@ -87,32 +69,16 @@ public class FileSteps {
                             .extract()
                             .response();
 
-                    return response.statusCode() == 200 &&
-                            response.jsonPath().getString("name").equals(fileName) &&
-                            response.jsonPath().getString("type").equals("file");
+                    if (response.statusCode() == 200) {
+                        responseRef.set(response);
+                        return true;
+                    }
+                    return false;
                 });
+
+        return responseRef.get();
     }
 
-    @Step("Переместить ресурс из {fromPath} в {toPath}")
-    public void moveResource(String fromPath, String toPath) {
-        Response response = given()
-                .spec(get())
-                .queryParam("from", fromPath)
-                .queryParam("path", toPath)
-        .when()
-                .post(MOVE)
-        .then()
-                .statusCode(anyOf(is(201), is(202)))
-                .extract()
-                .response();
-
-        if (response.statusCode() == 202) {
-            String operationId = response.jsonPath().getString("operation_id");
-            if (operationId != null) {
-                waitForOperationComplete(operationId);
-            }
-        }
-    }
 
     @Step("Проверить, что файл {filePath} НЕ существует")
     public void assertFileNotExists(String filePath) {
@@ -131,27 +97,16 @@ public class FileSteps {
                 });
     }
 
-    @Step("Загрузить файл из URL {fileUrl} по пути {filePath}")
-    public void uploadFileFromUrl(String filePath, String fileUrl) {
-        Response response = given()
-                .spec(get())
-                .header("User-Agent", "Mozilla/5.0")
-                .queryParam("path", filePath)
-                .queryParam("url", fileUrl)
-        .when()
-                .post(UPLOAD)
-        .then()
-                .statusCode(anyOf(is(202), is(200)))
-                .extract()
-                .response();
-
-
-        if (response.statusCode() == 202) {
+    @Step("Загрузить файл из URL {fileUrl} по пути {filePath} (с ожиданием)")
+    public Response uploadFileFromUrl(String filePath, String fileUrl) {
+        Response response = sendUploadFromUrlRequest(filePath, fileUrl);
+        if (response.getStatusCode() == 202) {
             String operationId = response.jsonPath().getString("operation_id");
             if (operationId != null) {
                 waitForOperationComplete(operationId);
             }
         }
+        return response;
     }
 
     @Step("Обновить пользовательские метаданные файла {filePath}")
@@ -163,23 +118,25 @@ public class FileSteps {
         .when()
                 .patch(RESOURCES)
         .then()
-                .statusCode(200)
-                .extract()
-                .as(ResourceMetadataResponse.class);
-        return response;   // ← возвращаем DTO
-    }
-
-    @Step("Получить метаданные ресурса {filePath}")
-    public ResourceMetadataResponse getResourceMetadata(String filePath) {
-        ResourceMetadataResponse response = given()
-                .spec(get())
-                .queryParam("path", filePath)
-        .when()
-                .get(RESOURCES)
-        .then()
-                .statusCode(200)
                 .extract()
                 .as(ResourceMetadataResponse.class);
         return response;
     }
+
+    @Step("Отправить запрос на загрузку файла из URL {fileUrl} по пути {filePath}")
+    public Response sendUploadFromUrlRequest(String filePath, String fileUrl) {
+        return given()
+                .spec(get())
+                .header("User-Agent", "Mozilla/5.0")
+                .queryParam("path", filePath)
+                .queryParam("url", fileUrl)
+        .when()
+                .post(UPLOAD)
+        .then()
+                .extract()
+                .response();
+    }
+
+
+
 }

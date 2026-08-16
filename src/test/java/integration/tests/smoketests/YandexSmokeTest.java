@@ -1,22 +1,33 @@
 package integration.tests.smoketests;
 
+import integration.tests.assertions.LinkResponseAssertions;
+import integration.tests.dto.ErrorResponse;
+import integration.tests.dto.LinkResponse;
 import integration.tests.steps.FolderSteps;
+import integration.tests.steps.ResourceSteps;
 import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Story;
+import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.awt.image.ImagingOpException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import static integration.constants.Endpoints.*;
 import static io.restassured.RestAssured.given;
 import static integration.client.RequestSpecs.get;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 
 public class YandexSmokeTest {
+
+    public static FolderSteps folderSteps = new FolderSteps();
+    public static ResourceSteps resourceSteps = new ResourceSteps();
 
     @Test
     @Tag("Smoke")
@@ -41,12 +52,16 @@ public class YandexSmokeTest {
     @Story("Папки")
     void createAndDeleteFolder()throws ImagingOpException {
         String folderPath = "/smoke_test_" + UUID.randomUUID();
-        FolderSteps Folder = new FolderSteps();
+
+
         try {
-            Folder.createFolder(folderPath);
+            Response response = folderSteps.createFolder(folderPath);
+            LinkResponse linkResponse = response.as(LinkResponse.class) ;
+            String decodedHref = URLDecoder.decode(linkResponse.getHref(), StandardCharsets.UTF_8);
+            LinkResponseAssertions.assertLinkResponse(linkResponse, folderPath);
         } finally {
-            Folder.deleteFolder(folderPath);
-            Folder.FolderNotExists(folderPath);
+            resourceSteps.deleteResource(folderPath);
+            resourceSteps.resourceNotExists(folderPath);
         }
     }
     @Test

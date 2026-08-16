@@ -2,37 +2,54 @@ package integration.tests.positive;
 
 import integration.tests.steps.FolderSteps;
 import integration.tests.steps.PublishSteps;
+import integration.tests.steps.ResourceSteps;
 import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Story;
+import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 public class YandexPublishPositiveTest {
+
+    public static PublishSteps publishSteps = new PublishSteps();
+    public static FolderSteps folderSteps = new FolderSteps();
+    public static ResourceSteps resourceSteps = new ResourceSteps();
 
     @Test
     @Tag("positive")
     @Severity(SeverityLevel.CRITICAL)
     @Description("Публикация папки и проверка, что она стала публичной 200")
     @DisplayName("Публикация папки, проверка публичного статуса")
-    @Story("Публикация")
+    @Story("Публикации")
     void publishFolderAndCheckPublicStatus() {
-        FolderSteps folderSteps = new FolderSteps();
-        PublishSteps publishSteps = new PublishSteps();
+
 
         String folderPath = "/publish_folder_" + UUID.randomUUID();
 
         try {
-            folderSteps.createFolder(folderPath);
-            publishSteps.publishResource(folderPath);
-            publishSteps.assertResourceIsPublic(folderPath);
+
+            Response createFolderResponse = folderSteps.createFolder(folderPath);
+            assertThat(createFolderResponse.statusCode()).isEqualTo(201);
+            Response publishFolder = publishSteps.publishResource(folderPath);
+            assertThat(publishFolder.getStatusCode()).isEqualTo(200);
+            publishFolder = publishSteps.getPublicLink(folderPath);
+            String publicURL = publishSteps.extractPublicUrl(publishFolder);
+            assertThat(publicURL).isNotNull();
+            Response publicResourceResponse = publishSteps.searchResourceIsPublic(publicURL);
+            assertThat(publicResourceResponse.getStatusCode()).isEqualTo(200);
 
         } finally {
-            folderSteps.deleteFolder(folderPath);
+
+            resourceSteps.deleteResource(folderPath);
+            resourceSteps.resourceNotExists(folderPath);
+
         }
     }
 }

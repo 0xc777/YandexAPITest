@@ -1,55 +1,67 @@
 package integration.tests.steps;
 
-import integration.tests.dto.ResourceMetadataResponse;
-import integration.tests.dto.LinkResponse;
+
 import io.qameta.allure.Step;
+import io.restassured.response.Response;
 
 import static integration.client.RequestSpecs.get;
 import static integration.constants.Endpoints.*;
 import static io.restassured.RestAssured.given;
-import static org.assertj.core.api.Assertions.assertThat;
+
 
 public class PublishSteps {
 
     @Step("Опубликовать ресурс {path}")
-    public String publishResource(String  path) {
-        LinkResponse response = given()
+    public Response publishResource(String  path) {
+        return given()
                 .spec(get())
                 .queryParam("path", path)
         .when()
                 .put(PUBLISH)
         .then()
-                .statusCode(200)
                 .extract()
-                .as(LinkResponse.class);
+                .response();
 
-        return response.getHref();
     }
+
     @Step("Получить публичную ссылку на ресурс {path}")
-    public String getPublicLink(String path) {
-        ResourceMetadataResponse response = given()
+    public Response getPublicLink(String path) {
+       return given()
                 .spec(get())
                 .queryParam("path", path)
         .when()
-                .get(RESOURCES)   // эндпоинт /resources
+                .get(RESOURCES)
         .then()
-                .statusCode(200)
                 .extract()
-                .as(ResourceMetadataResponse.class);   // ✅ правильный DTO
-
-        String publicUrl = response.getPublicUrl(); // теперь поле есть
-        assertThat(publicUrl).isNotNull();
-        return publicUrl;
+                .response();
     }
-    @Step("Проверить, что ресурс {path} опубликован и доступен по ссылке")
-    public void assertResourceIsPublic(String path) {
-        String publicUrl = getPublicLink(path);
 
-        given()
+    @Step("Найти ресурс {publicUrl} по ссылке")
+    public Response searchResourceIsPublic(String publicUrl) {
+
+        return given()
         .when()
                 .get(publicUrl)
         .then()
-                .statusCode(200);
+                .extract()
+                .response();
+    }
+
+    @Step("Извлечь публичную ссылку из ответа")
+    public String extractPublicUrl(Response response) {
+        return response.jsonPath().getString("public_url");
+    }
+
+    @Step("Удалить публикацию ресурса {path}")
+    public Response deletePublish(String path) {
+        return given()
+                .spec(get())
+                .queryParam("path", path)
+         .when()
+                .delete(PUBLISH)
+         .then()
+                .extract()
+                .response();
     }
 
 }

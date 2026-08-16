@@ -3,10 +3,12 @@ package integration.tests.positive;
 import integration.tests.dto.ResourceMetadataResponse;
 import integration.tests.steps.FileSteps;
 import integration.tests.steps.FolderSteps;
+import integration.tests.steps.ResourceSteps;
 import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Story;
+import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -19,6 +21,10 @@ import java.util.UUID;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 public class YandexFilePositiveTest {
+
+    public static FolderSteps folderSteps = new FolderSteps();
+    public static FileSteps fileSteps = new FileSteps();
+    public static ResourceSteps resourceSteps = new ResourceSteps();
 
     @Test
     @Tag("positive")
@@ -34,21 +40,23 @@ public class YandexFilePositiveTest {
         String filePath = pathFolder + "/" + fileName;
         String targetPath = targetFolder + "/" + fileName;
 
-        FolderSteps folderSteps = new FolderSteps();
-        FileSteps fileSteps = new FileSteps();
+
         try {
 
             folderSteps.createFolder(pathFolder);
             folderSteps.createFolder(targetFolder);
             fileSteps.uploadFile(filePath, "Hello, World!".getBytes());
-            fileSteps.copyResource(pathFolder,targetPath);
-            fileSteps.assertFileExists(filePath,fileName);
+            resourceSteps.copyResource(pathFolder,targetPath);
+            Response response = fileSteps.searchFile(filePath);
+            assertThat(response.getStatusCode()).isEqualTo(200);
+            assertThat(response.jsonPath().getString("name")).isEqualTo(fileName);
+            assertThat(response.jsonPath().getString("type")).isEqualTo("file");
 
         } finally {
-            folderSteps.deleteFolder(pathFolder);
-            folderSteps.deleteFolder(targetFolder);
-            folderSteps.FolderNotExists(pathFolder);
-            folderSteps.FolderNotExists(targetFolder);
+            resourceSteps.deleteResource(pathFolder);
+            resourceSteps.deleteResource(targetFolder);
+            resourceSteps.resourceNotExists(pathFolder);
+            resourceSteps.resourceNotExists(targetFolder);
         }
     }
     @Test
@@ -64,21 +72,20 @@ public class YandexFilePositiveTest {
         String filePath = pathFolder + "/" + fileName;
         String targetPath = targetFolder + "/" + fileName;
 
-        FolderSteps folderSteps = new FolderSteps();
-        FileSteps fileSteps = new FileSteps();
 
         try {
 
             folderSteps.createFolder(pathFolder);
             folderSteps.createFolder(targetFolder);
             fileSteps.uploadFile(filePath, "Hello, World!".getBytes());
-            fileSteps.moveResource(filePath, targetPath);
-            fileSteps.assertFileExists(targetPath, fileName);
+            resourceSteps.moveResource(filePath, targetPath);
+            fileSteps.searchFile(targetPath);
             fileSteps.assertFileNotExists(filePath);
 
         } finally {
-            folderSteps.deleteFolder(pathFolder);
-            folderSteps.deleteFolder(targetFolder);
+            resourceSteps.deleteResource(pathFolder);
+            resourceSteps.deleteResource(targetFolder);
+            resourceSteps.resourceNotExists(filePath);
         }
     }
     @Test
@@ -91,14 +98,14 @@ public class YandexFilePositiveTest {
         String path = "/uploaded_from_url_" + UUID.randomUUID() + ".txt";
         String fileUrl = "https://raw.githubusercontent.com/0xc777/YandexAPITest/main/README.md";
         String fileName = path.substring(path.lastIndexOf("/") + 1);
-        FolderSteps folderSteps = new FolderSteps();
-        FileSteps fileSteps = new FileSteps();
+
 
         try {
             fileSteps.uploadFileFromUrl(path, fileUrl);
-            fileSteps.assertFileExists(path, fileName);
+            fileSteps.searchFile(path);
         } finally {
-            folderSteps.deleteFolder(path);  // удаляем загруженный файл
+            resourceSteps.deleteResource(path);
+            resourceSteps.resourceNotExists(path);
         }
     }
 
@@ -111,8 +118,8 @@ public class YandexFilePositiveTest {
     void updateFileMetadata() {
         String filePath = "/metadata_test_" + UUID.randomUUID() + ".txt";
         byte[] content = "test content".getBytes();
-        FolderSteps folderSteps = new FolderSteps();
-        FileSteps fileSteps = new FileSteps();
+
+
         Map<String, String> customProps = new HashMap<>();
         customProps.put("tag", "important");
         customProps.put("color", "red");
@@ -123,12 +130,13 @@ public class YandexFilePositiveTest {
                     .containsEntry("tag", "important")
                     .containsEntry("color", "red");
 
-            ResourceMetadataResponse getResponse = fileSteps.getResourceMetadata(filePath);
+            ResourceMetadataResponse getResponse = resourceSteps.getResourceMetadata(filePath);
             assertThat(getResponse.getCustomProperties())
                     .containsEntry("tag", "important")
                     .containsEntry("color", "red");
         } finally {
-            folderSteps.deleteFolder(filePath);
+            resourceSteps.deleteResource(filePath);
+            resourceSteps.resourceNotExists(filePath);
         }
     }
 }

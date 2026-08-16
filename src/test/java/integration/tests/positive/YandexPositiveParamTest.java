@@ -120,7 +120,7 @@ public class YandexPositiveParamTest {
     @Tag("positive")
     @Severity(SeverityLevel.NORMAL)
     @Description("Создание файлов с разными допустимыми именами 201")
-    @Story("Ресурсы")
+    @Story("Файлы")
     void shouldCreateFilesWithDifferentNames(String fileName) throws IOException {
         String filePath = "/" + fileName + "_" + System.currentTimeMillis() + ".txt";
         String content = "Test content";
