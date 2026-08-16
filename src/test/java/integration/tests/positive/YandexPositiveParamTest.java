@@ -29,7 +29,7 @@ public class YandexPositiveParamTest {
     @Description("Загрузка файлов разных типов")
     @DisplayName("Загрузка файлов разных расширений → 201")
     @Story("Файлы")
-    void LoadingFilesOfDifferentTypes(String extension) throws IOException {
+    void loadingFilesOfDifferentTypes(String extension) throws IOException {
         String fileName = "upload_test_" + UUID.randomUUID() + "." + extension;
         String filePath = "/" + fileName;
         String content = "Test content for " + extension + " file";
@@ -85,7 +85,7 @@ public class YandexPositiveParamTest {
     @Severity(SeverityLevel.NORMAL)
     @DisplayName("Создание папки с разными допустимыми именами и пробелами 201")
     @Story("Папки")
-    void CreateFolderWithCyrillicAndSpaces(String folderName) {
+    void createFolderWithCyrillicAndSpaces(String folderName) {
         String path = "/" + folderName + "_" + System.currentTimeMillis();
 
         given()
@@ -121,7 +121,7 @@ public class YandexPositiveParamTest {
     @Severity(SeverityLevel.NORMAL)
     @Description("Создание файлов с разными допустимыми именами 201")
     @Story("Файлы")
-    void shouldCreateFilesWithDifferentNames(String fileName) throws IOException {
+    void createFilesWithDifferentNames(String fileName) throws IOException {
         String filePath = "/" + fileName + "_" + System.currentTimeMillis() + ".txt";
         String content = "Test content";
 

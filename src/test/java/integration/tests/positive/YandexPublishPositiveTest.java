@@ -12,6 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -28,7 +29,7 @@ public class YandexPublishPositiveTest {
     @Description("Публикация папки и проверка, что она стала публичной 200")
     @DisplayName("Публикация папки, проверка публичного статуса")
     @Story("Публикации")
-    void publishFolderAndCheckPublicStatus() {
+    void publishFolderAndCheckPublicStatus() throws IOException {
 
 
         String folderPath = "/publish_folder_" + UUID.randomUUID();

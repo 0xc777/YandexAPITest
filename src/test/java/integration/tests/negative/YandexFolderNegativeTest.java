@@ -15,6 +15,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import integration.tests.steps.FolderSteps;
+
+import java.io.IOException;
 import java.util.UUID;
 
 import static integration.tests.assertions.ErrorConditions.diskNotFound;
@@ -47,7 +49,7 @@ public class YandexFolderNegativeTest {
     @Description("Создание папки с существующим именем 409")
     @DisplayName("Создание уже существующей папки")
     @Story("Папки")
-    void return409WhenFolderAlreadyExists(){
+    void return409WhenFolderAlreadyExists() throws IOException {
 
         String folderPath = "/negative_test_" + UUID.randomUUID();
 

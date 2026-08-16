@@ -28,7 +28,7 @@ public class YandexNegativeParamTest {
     @Severity(SeverityLevel.NORMAL)
     @DisplayName("Невалидные значения overwrite возвращают 400")
     @Story("Ресурсы")
-    void Return400ForInvalidOverwrite(String overwrite) {
+    void return400ForInvalidOverwrite(String overwrite) {
         String path = "/test_file_" + UUID.randomUUID() + ".txt";
 
         given()
@@ -47,7 +47,7 @@ public class YandexNegativeParamTest {
     @Severity(SeverityLevel.NORMAL)
     @DisplayName("Неподдерживаемый метод  405")
     @Story("Ресурсы")
-    void MethodsFor405(String endpoint, String method) {
+    void methodsFor405(String endpoint, String method) {
         given()
                 .spec(get())
         .when()
