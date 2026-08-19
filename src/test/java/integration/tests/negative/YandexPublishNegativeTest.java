@@ -2,10 +2,8 @@ package integration.tests.negative;
 
 import integration.tests.assertions.ErrorConditions;
 import integration.tests.dto.ErrorResponse;
-import integration.tests.steps.FileSteps;
-import integration.tests.steps.FolderSteps;
-import integration.tests.steps.PublishSteps;
-import integration.tests.steps.ResourceSteps;
+import integration.tests.steps.interfaces.PublishSteps;
+import integration.utils.StepsFactory;
 import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
@@ -21,7 +19,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class YandexPublishNegativeTest {
 
-    public static PublishSteps publishSteps = new PublishSteps();
+    private final PublishSteps publishSteps = StepsFactory.getPublishStepsAssured();
 
     @Test
     @Tag("negative")

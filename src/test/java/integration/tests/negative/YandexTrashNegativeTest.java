@@ -2,7 +2,8 @@ package integration.tests.negative;
 
 import integration.tests.assertions.ErrorConditions;
 import integration.tests.dto.ErrorResponse;
-import integration.tests.steps.TrashSteps;
+import integration.tests.steps.assured.TrashStepsAssured;
+import integration.tests.steps.interfaces.TrashSteps;
 import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
@@ -18,7 +19,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class YandexTrashNegativeTest {
 
-    public static  TrashSteps trashSteps = new TrashSteps();
+    private final TrashSteps trashSteps = new TrashStepsAssured();
 
     @Test
     @Tag("negative")

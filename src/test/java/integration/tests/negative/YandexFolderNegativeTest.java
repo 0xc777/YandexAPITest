@@ -4,8 +4,9 @@ import integration.tests.assertions.ErrorConditions;
 import integration.tests.assertions.LinkResponseAssertions;
 import integration.tests.dto.ErrorResponse;
 import integration.tests.dto.LinkResponse;
-import integration.tests.steps.FileSteps;
-import integration.tests.steps.ResourceSteps;
+import integration.tests.steps.interfaces.FolderSteps;
+import integration.tests.steps.interfaces.ResourceSteps;
+import integration.utils.StepsFactory;
 import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
@@ -14,7 +15,6 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import integration.tests.steps.FolderSteps;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -25,8 +25,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class YandexFolderNegativeTest {
 
-    public static FolderSteps folderSteps = new FolderSteps();
-    public static ResourceSteps resourceSteps = new ResourceSteps();
+    private final FolderSteps folderSteps = StepsFactory.getFolderStepsAssured();
+    private final ResourceSteps resourceSteps = StepsFactory.getResourceStepsAssured();
 
     @Test
     @Tag("negative")

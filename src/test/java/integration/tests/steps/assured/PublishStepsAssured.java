@@ -1,6 +1,7 @@
-package integration.tests.steps;
+package integration.tests.steps.assured;
 
 
+import integration.tests.steps.interfaces.PublishSteps;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
 
@@ -9,7 +10,7 @@ import static integration.constants.Endpoints.*;
 import static io.restassured.RestAssured.given;
 
 
-public class PublishSteps {
+public class PublishStepsAssured implements PublishSteps {
 
     @Step("Опубликовать ресурс {path}")
     public Response publishResource(String  path) {

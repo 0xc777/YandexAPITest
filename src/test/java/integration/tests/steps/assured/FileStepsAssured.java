@@ -1,8 +1,10 @@
-package integration.tests.steps;
+package integration.tests.steps.assured;
 
 import integration.tests.dto.*;
+import integration.tests.steps.interfaces.FileSteps;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
+
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -15,10 +17,11 @@ import static io.restassured.RestAssured.given;
 import static org.awaitility.Awaitility.await;
 
 
-public class FileSteps {
+public class FileStepsAssured implements FileSteps {
+
 
     @Step("Получить ссылку для загрузки файла {filePath}")
-    public String getUploadLink(String filePath) {
+    public String getLink(String filePath) {
     LinkResponse response =
          given()
                 .spec(get())
@@ -46,7 +49,7 @@ public class FileSteps {
 
     @Step("Загрузить файл {filePath} с содержимым")
     public Response uploadFile(String filePath, byte[] content) {
-        String uploadUrl = getUploadLink(filePath);
+        String uploadUrl = getLink(filePath);
         return uploadFileByLink(uploadUrl, content);
     }
 
@@ -81,7 +84,7 @@ public class FileSteps {
 
 
     @Step("Проверить, что файл {filePath} НЕ существует")
-    public void assertFileNotExists(String filePath) {
+    public void checkFileNotExists(String filePath) {
         await()
                 .atMost(5, TimeUnit.SECONDS)
                 .pollInterval(500, TimeUnit.MILLISECONDS)
@@ -99,7 +102,7 @@ public class FileSteps {
 
     @Step("Загрузить файл из URL {fileUrl} по пути {filePath} (с ожиданием)")
     public Response uploadFileFromUrl(String filePath, String fileUrl) {
-        Response response = sendUploadFromUrlRequest(filePath, fileUrl);
+        Response response = sendUploadFromUrl(filePath, fileUrl);
         if (response.getStatusCode() == 202) {
             String operationId = response.jsonPath().getString("operation_id");
             if (operationId != null) {
@@ -124,7 +127,7 @@ public class FileSteps {
     }
 
     @Step("Отправить запрос на загрузку файла из URL {fileUrl} по пути {filePath}")
-    public Response sendUploadFromUrlRequest(String filePath, String fileUrl) {
+    public Response sendUploadFromUrl(String filePath, String fileUrl) {
         return given()
                 .spec(get())
                 .header("User-Agent", "Mozilla/5.0")

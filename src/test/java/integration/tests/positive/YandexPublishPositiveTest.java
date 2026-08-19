@@ -1,8 +1,9 @@
 package integration.tests.positive;
 
-import integration.tests.steps.FolderSteps;
-import integration.tests.steps.PublishSteps;
-import integration.tests.steps.ResourceSteps;
+import integration.tests.steps.interfaces.FolderSteps;
+import integration.tests.steps.interfaces.PublishSteps;
+import integration.tests.steps.interfaces.ResourceSteps;
+import integration.utils.StepsFactory;
 import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
@@ -19,9 +20,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class YandexPublishPositiveTest {
 
-    public static PublishSteps publishSteps = new PublishSteps();
-    public static FolderSteps folderSteps = new FolderSteps();
-    public static ResourceSteps resourceSteps = new ResourceSteps();
+    private final PublishSteps publishSteps = StepsFactory.getPublishStepsAssured();
+    private final FolderSteps folderSteps = StepsFactory.getFolderStepsAssured();
+    private final ResourceSteps resourceSteps = StepsFactory.getResourceStepsAssured();
 
     @Test
     @Tag("positive")

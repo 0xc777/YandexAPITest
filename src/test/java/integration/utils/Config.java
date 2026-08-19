@@ -3,12 +3,14 @@ package integration.utils;
 import io.restassured.RestAssured;
 import io.restassured.config.LogConfig;
 
+import java.time.Duration;
 import java.util.List;
 
 public class Config {
     public static final String BASE_URL = "https://cloud-api.yandex.net";
     public static final String TOKEN =
             System.getenv("YANDEX_TOKEN");
+
 
 
     static {

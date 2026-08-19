@@ -1,9 +1,10 @@
 package integration.tests.positive;
 
 import integration.tests.dto.ResourceMetadataResponse;
-import integration.tests.steps.FileSteps;
-import integration.tests.steps.FolderSteps;
-import integration.tests.steps.ResourceSteps;
+import integration.tests.steps.interfaces.FileSteps;
+import integration.tests.steps.interfaces.FolderSteps;
+import integration.tests.steps.interfaces.ResourceSteps;
+import integration.utils.StepsFactory;
 import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
@@ -22,9 +23,9 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 public class YandexFilePositiveTest {
 
-    public static FolderSteps folderSteps = new FolderSteps();
-    public static FileSteps fileSteps = new FileSteps();
-    public static ResourceSteps resourceSteps = new ResourceSteps();
+    private final FileSteps fileSteps = StepsFactory.getFileStepsAssured();
+    private final FolderSteps folderSteps = StepsFactory.getFolderStepsAssured();
+    private final ResourceSteps resourceSteps = StepsFactory.getResourceStepsAssured();
 
     @Test
     @Tag("positive")
@@ -80,7 +81,7 @@ public class YandexFilePositiveTest {
             fileSteps.uploadFile(filePath, "Hello, World!".getBytes());
             resourceSteps.moveResource(filePath, targetPath);
             fileSteps.searchFile(targetPath);
-            fileSteps.assertFileNotExists(filePath);
+            fileSteps.checkFileNotExists(filePath);
 
         } finally {
             resourceSteps.deleteResource(pathFolder);

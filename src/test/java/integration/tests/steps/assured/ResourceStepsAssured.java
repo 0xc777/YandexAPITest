@@ -1,6 +1,7 @@
-package integration.tests.steps;
+package integration.tests.steps.assured;
 
 import integration.tests.dto.ResourceMetadataResponse;
+import integration.tests.steps.interfaces.ResourceSteps;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
 
@@ -12,7 +13,7 @@ import static integration.utils.AsyncOperationHelper.waitForOperationComplete;
 import static io.restassured.RestAssured.given;
 import static org.awaitility.Awaitility.await;
 
-public class ResourceSteps {
+public class ResourceStepsAssured implements ResourceSteps {
 
     @Step("Получить метаданные ресурса {resourcePath}")
     public ResourceMetadataResponse getResourceMetadata (String filePath) {
@@ -97,7 +98,7 @@ public class ResourceSteps {
     }
 
     @Step("Отправить запрос на перемещение из {fromPath} в {toPath}")
-    public Response sendMoveRequest(String fromPath, String toPath) {
+    public Response sendMove(String fromPath, String toPath) {
         return given()
                 .spec(get())
                 .queryParam("from", fromPath)
@@ -111,7 +112,7 @@ public class ResourceSteps {
 
     @Step("Переместить ресурс из {fromPath} в {toPath} (с ожиданием)")
     public Response moveResource(String fromPath, String toPath) {
-        Response response = sendMoveRequest(fromPath, toPath);
+        Response response = sendMove(fromPath, toPath);
         if (response.getStatusCode() == 202) {
             String operationId = response.jsonPath().getString("operation_id");
             if (operationId != null) {

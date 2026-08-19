@@ -1,5 +1,6 @@
-package integration.tests.steps;
+package integration.tests.steps.assured;
 
+import integration.tests.steps.interfaces.TrashSteps;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
 
@@ -7,7 +8,7 @@ import static integration.client.RequestSpecs.get;
 import static integration.constants.Endpoints.TRASH_RESTORE;
 import static io.restassured.RestAssured.given;
 
-public class TrashSteps {
+public class TrashStepsAssured implements TrashSteps {
 
     @Step("Восстановление файла")
     public Response restoreFile( String path){

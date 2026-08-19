@@ -1,5 +1,6 @@
-package integration.tests.steps;
+package integration.tests.steps.assured;
 
+import integration.tests.steps.interfaces.FolderSteps;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
 
@@ -11,7 +12,7 @@ import static io.restassured.RestAssured.given;
 
 
 
-public class FolderSteps {
+public class FolderStepsAssured implements FolderSteps {
     @Step("Создать папку {name}")
     public Response createFolder (String folderPath) {
         return given()
