@@ -8,7 +8,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
+    <groupId>com.github.0xc777</groupId>
     <artifactId>YandexAPITest</artifactId>
     <version>1.0-SNAPSHOT</version>
 
@@ -36,13 +36,6 @@
             <artifactId>allure-junit5</artifactId>
             <version>${allure.version}</version>
             <scope>test</scope>
-        </dependency>
-
-        <!-- Gson -->
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>${gson.version}</version>
         </dependency>
 
         <!-- REST Assured -->
