@@ -5,6 +5,8 @@ import integration.tests.steps.interfaces.ResourceSteps;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
 
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static integration.client.RequestSpecs.get;
@@ -61,7 +63,7 @@ public class ResourceStepsAssured implements ResourceSteps {
                     } else if (statusCode == 423) {
                         return false;
                     } else {
-                        throw new AssertionError("Unexpected status code: " + statusCode);
+                        throw new AssertionError("status code: " + statusCode);
                     }
                 });
     }
@@ -146,4 +148,6 @@ public class ResourceStepsAssured implements ResourceSteps {
         }
         return response;
     }
+
+
 }

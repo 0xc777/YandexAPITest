@@ -44,8 +44,10 @@ public class YandexFilePositiveTest {
 
         try {
 
-            folderSteps.createFolder(pathFolder);
-            folderSteps.createFolder(targetFolder);
+            Response createFResponse1 = folderSteps.createFolder(pathFolder);
+            Response createFResponse2 = folderSteps.createFolder(targetFolder);
+            assertThat(createFResponse1.statusCode()).isEqualTo(201);
+            assertThat(createFResponse2.statusCode()).isEqualTo(201);
             fileSteps.uploadFile(filePath, "Hello, World!".getBytes());
             resourceSteps.copyResource(pathFolder,targetPath);
             Response response = fileSteps.searchFile(filePath);
@@ -76,17 +78,25 @@ public class YandexFilePositiveTest {
 
         try {
 
-            folderSteps.createFolder(pathFolder);
-            folderSteps.createFolder(targetFolder);
+            Response createFResponse1 = folderSteps.createFolder(pathFolder);
+            Response createFResponse2 = folderSteps.createFolder(targetFolder);
+            assertThat(createFResponse1.statusCode()).isEqualTo(201);
+            assertThat(createFResponse2.statusCode()).isEqualTo(201);
             fileSteps.uploadFile(filePath, "Hello, World!".getBytes());
+            Response searchResponse1 = fileSteps.searchFile(filePath);
+            assertThat(searchResponse1.statusCode()).isEqualTo(200);
             resourceSteps.moveResource(filePath, targetPath);
-            fileSteps.searchFile(targetPath);
+            Response searchResponse2 = fileSteps.searchFile(targetPath);
+            assertThat(searchResponse2.statusCode()).isEqualTo(200);
             fileSteps.checkFileNotExists(filePath);
 
         } finally {
             resourceSteps.deleteResource(pathFolder);
             resourceSteps.deleteResource(targetFolder);
+            resourceSteps.resourceNotExists(pathFolder);
+            resourceSteps.resourceNotExists(targetFolder);
             resourceSteps.resourceNotExists(filePath);
+
         }
     }
     @Test
@@ -103,7 +113,8 @@ public class YandexFilePositiveTest {
 
         try {
             fileSteps.uploadFileFromUrl(path, fileUrl);
-            fileSteps.searchFile(path);
+            Response searchResponse = fileSteps.searchFile(path);
+            assertThat(searchResponse.statusCode()).isEqualTo(200);
         } finally {
             resourceSteps.deleteResource(path);
             resourceSteps.resourceNotExists(path);
@@ -113,8 +124,8 @@ public class YandexFilePositiveTest {
     @Test
     @Tag("positive")
     @Severity(SeverityLevel.NORMAL)
-    @Description("Обновление пользовательских метаданных у файла")
-    @DisplayName("Обновление метаданных файла → 200, свойства обновлены")
+    @Description("Обновление пользовательских метаданных у файла 200")
+    @DisplayName("Обновление метаданных файла, свойства обновлены")
     @Story("Метаданные")
     void updateFileMetadata() {
         String filePath = "/metadata_test_" + UUID.randomUUID() + ".txt";

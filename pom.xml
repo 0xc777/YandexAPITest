@@ -22,7 +22,7 @@
     </properties>
 
     <dependencies>
-        <!-- JUnit 5 -->
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -30,7 +30,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Allure -->
         <dependency>
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-junit5</artifactId>
@@ -38,7 +37,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- REST Assured -->
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
@@ -46,7 +44,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Jackson -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -54,7 +51,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Интеграция Allure с REST Assured -->
         <dependency>
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-rest-assured</artifactId>
@@ -80,13 +76,11 @@
 
     <build>
         <plugins>
-            <!-- Maven Surefire -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
                 <configuration>
-                    <!-- Включаем параллельный запуск классов -->
                     <parallel>classes</parallel>
                     <threadCount>4</threadCount>
 
@@ -96,7 +90,6 @@
                         </allure.results.directory>
                     </systemPropertyVariables>
 
-                    <!-- Настройки JUnit 5 для параллелизма методов внутри классов -->
                     <properties>
                         <configurationParameters>
                             junit.jupiter.execution.parallel.enabled = true
@@ -109,7 +102,6 @@
                 </configuration>
             </plugin>
 
-            <!-- Allure Maven -->
             <plugin>
                 <groupId>io.qameta.allure</groupId>
                 <artifactId>allure-maven</artifactId>

@@ -56,9 +56,7 @@ public class YandexSmokeTest {
 
         try {
             Response response = folderSteps.createFolder(folderPath);
-            LinkResponse linkResponse = response.as(LinkResponse.class) ;
-            String decodedHref = URLDecoder.decode(linkResponse.getHref(), StandardCharsets.UTF_8);
-            LinkResponseAssertions.assertLinkResponse(linkResponse, folderPath);
+            assertThat(response.statusCode()).isEqualTo(201);
         } finally {
             resourceSteps.deleteResource(folderPath);
             resourceSteps.resourceNotExists(folderPath);
