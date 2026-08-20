@@ -68,7 +68,7 @@ public class ResourceStepsAssured implements ResourceSteps {
 
 
     @Step("Проверить, что ресурс {resourcePath} НЕ существует")
-    public void resourceNotExists(String resourcePath) {
+    public void resourceNotExists(String resourcePath) {  // Не забыть переписать, сделать универсальным, с возвращением Response
         await()
                 .atMost(10, TimeUnit.SECONDS)
                 .pollInterval(500, TimeUnit.MILLISECONDS)

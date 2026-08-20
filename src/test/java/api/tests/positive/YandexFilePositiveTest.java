@@ -151,4 +151,33 @@ public class YandexFilePositiveTest {
             resourceSteps.resourceNotExists(filePath);
         }
     }
+
+    @Test
+    @Tag("positive")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("Успешное удаление файла в папке 404")
+    @DisplayName("Удаление только файла")
+    @Story("Файлы")
+    void deleteFileOnFolder() {
+
+        String folderPath = "/testDeleteFileOnFolder" + UUID.randomUUID();
+        String fileName = "DeleteMe" + UUID.randomUUID();
+        String filePath = folderPath + "/" + fileName;
+
+        try{
+            Response createFResponse = folderSteps.createFolder(folderPath);
+            assertThat(createFResponse.statusCode()).isEqualTo(201);
+            fileSteps.uploadFile(filePath,"Delete".getBytes());
+            Response searchFiResponse = fileSteps.searchFile(filePath);
+            assertThat(searchFiResponse.statusCode()).isEqualTo(200);
+            resourceSteps.deleteResource(filePath);
+            resourceSteps.resourceNotExists(filePath);
+        }
+        finally {
+            resourceSteps.deleteResource(folderPath);
+            resourceSteps.resourceNotExists(folderPath);
+        }
+
+
+    }
 }
