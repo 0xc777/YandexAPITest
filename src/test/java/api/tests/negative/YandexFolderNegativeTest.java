@@ -25,8 +25,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class YandexFolderNegativeTest {
 
-    private final FolderSteps folderSteps = StepsFactory.getFolderStepsAssured();
-    private final ResourceSteps resourceSteps = StepsFactory.getResourceStepsAssured();
+    private final FolderSteps folderSteps = StepsFactory.getFolderSteps();
+    private final ResourceSteps resourceSteps = StepsFactory.getResourceSteps();
 
     @Test
     @Tag("negative")

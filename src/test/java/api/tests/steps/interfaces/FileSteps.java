@@ -15,5 +15,5 @@ public interface FileSteps {
     Response uploadFileFromUrl(String filePath, String fileUrl);
     ResourceMetadataResponse updateFileMetadata(String filePath, Map<String, String> customProps);
     Response sendUploadFromUrl(String filePath, String fileUrl);
-
+    Response sendOverwrite(String overwrite, String path);
 }

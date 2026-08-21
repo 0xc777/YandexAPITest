@@ -2,11 +2,8 @@ package api.tests.negative;
 
 import api.tests.assertions.ErrorConditions;
 import api.tests.assertions.LinkResponseAssertions;
-import api.tests.dto.ErrorResponse;
-import api.tests.dto.LinkResponse;
-import api.tests.steps.interfaces.FileSteps;
-import api.tests.steps.interfaces.FolderSteps;
-import api.tests.steps.interfaces.ResourceSteps;
+import api.tests.dto.*;
+import api.tests.steps.interfaces.*;
 import api.utils.StepsFactory;
 import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
@@ -24,9 +21,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class YandexFileNegativeTest {
 
-    private final FileSteps fileSteps = StepsFactory.getFileStepsAssured();
-    private final FolderSteps folderSteps = StepsFactory.getFolderStepsAssured();
-    private final ResourceSteps resourceSteps = StepsFactory.getResourceStepsAssured();
+    private final FileSteps fileSteps = StepsFactory.getFileSteps();
+    private final FolderSteps folderSteps = StepsFactory.getFolderSteps();
+    private final ResourceSteps resourceSteps = StepsFactory.getResourceSteps();
 
 
     @Test

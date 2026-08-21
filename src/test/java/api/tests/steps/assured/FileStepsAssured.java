@@ -140,6 +140,17 @@ public class FileStepsAssured implements FileSteps {
                 .response();
     }
 
-
+    @Step("Передача значения overwrite")
+    public Response sendOverwrite(String overwrite, String path){
+        return given()
+                .spec(get())
+                .queryParam("path", path)
+                .queryParam("overwrite", overwrite)
+        .when()
+                .get(UPLOAD)
+        .then()
+                .extract()
+                .response();
+    }
 
 }

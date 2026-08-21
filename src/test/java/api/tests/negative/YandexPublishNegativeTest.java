@@ -19,7 +19,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class YandexPublishNegativeTest {
 
-    private final PublishSteps publishSteps = StepsFactory.getPublishStepsAssured();
+    private final PublishSteps publishSteps = StepsFactory.getPublishSteps();
 
     @Test
     @Tag("negative")

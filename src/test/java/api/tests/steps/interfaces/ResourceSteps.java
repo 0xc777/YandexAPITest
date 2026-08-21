@@ -14,4 +14,5 @@ public interface ResourceSteps {
     Response moveResource(String fromPath, String toPath);
     Response sendCopyRequest(String fromPath, String toPath);
     Response copyResource(String fromPath, String toPath);
+    Response sendEndpoint(String endpoint, String method);
 }

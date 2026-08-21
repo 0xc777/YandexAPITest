@@ -22,8 +22,8 @@ import static org.hamcrest.Matchers.greaterThan;
 
 public class YandexSmokeTest {
 
-    private final FolderSteps folderSteps = StepsFactory.getFolderStepsAssured();
-    private final ResourceSteps resourceSteps = StepsFactory.getResourceStepsAssured();
+    private final FolderSteps folderSteps = StepsFactory.getFolderSteps();
+    private final ResourceSteps resourceSteps = StepsFactory.getResourceSteps();
 
     @Test
     @Tag("Smoke")

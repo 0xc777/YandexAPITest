@@ -147,5 +147,15 @@ public class ResourceStepsAssured implements ResourceSteps {
         return response;
     }
 
+    @Step("Передача эндпоинта")
+    public Response sendEndpoint(String endpoint, String method){
+       return given()
+               .spec(get())
+       .when()
+               .request(method, endpoint)
+       .then()
+               .extract()
+               .response();
+    }
 
 }

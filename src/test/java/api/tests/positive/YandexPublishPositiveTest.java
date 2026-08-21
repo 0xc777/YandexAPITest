@@ -20,9 +20,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class YandexPublishPositiveTest {
 
-    private final PublishSteps publishSteps = StepsFactory.getPublishStepsAssured();
-    private final FolderSteps folderSteps = StepsFactory.getFolderStepsAssured();
-    private final ResourceSteps resourceSteps = StepsFactory.getResourceStepsAssured();
+    private final PublishSteps publishSteps = StepsFactory.getPublishSteps();
+    private final FolderSteps folderSteps = StepsFactory.getFolderSteps();
+    private final ResourceSteps resourceSteps = StepsFactory.getResourceSteps();
 
     @Test
     @Tag("positive")

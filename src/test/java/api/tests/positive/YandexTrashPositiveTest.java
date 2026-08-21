@@ -21,9 +21,9 @@ import java.util.UUID;
 public class YandexTrashPositiveTest {
 
     private final TrashSteps trashSteps = new TrashStepsAssured();
-    private final FileSteps fileSteps = StepsFactory.getFileStepsAssured();
-    private final FolderSteps folderSteps = StepsFactory.getFolderStepsAssured();
-    private final ResourceSteps resourceSteps = StepsFactory.getResourceStepsAssured();
+    private final FileSteps fileSteps = StepsFactory.getFileSteps();
+    private final FolderSteps folderSteps = StepsFactory.getFolderSteps();
+    private final ResourceSteps resourceSteps = StepsFactory.getResourceSteps();
 
     @Test
     @Tag("positive")
