@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static api.constants.Endpoints.DISK;
-import static api.utils.Config.BASE_URL;
+import static api.utils.Config.*;
 import static io.restassured.RestAssured.given;
 
 public class YandexAuthorizationNegativeTest {
@@ -22,7 +22,7 @@ public class YandexAuthorizationNegativeTest {
     @Story("Авторизация")
     void return401WhenNoToken (){
         given()
-                .baseUri(BASE_URL)
+                .baseUri(getBaseUrl())
                 .contentType("application/json")
         .when()
                 .get(DISK)
@@ -38,7 +38,7 @@ public class YandexAuthorizationNegativeTest {
     @Story("Авторизация")
     void return401WhenInvalidToken(){
         given()
-                .baseUri(BASE_URL)
+                .baseUri(getBaseUrl())
                 .header("Authorization", "OAuth invalid_token")
                 .contentType("application/json")
         .when()

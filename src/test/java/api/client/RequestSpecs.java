@@ -11,18 +11,19 @@ import java.util.List;
 
 public class RequestSpecs
 {
-    private static final RequestSpecification REQUEST_SPEC = new RequestSpecBuilder()
-            .setBaseUri(Config.BASE_URL)
+    private static final RequestSpecification BASE_SPEC = new RequestSpecBuilder()
             .addHeader("Authorization", "OAuth " + Config.TOKEN)
             .setContentType("application/json")
             .setConfig(RestAssured.config()
-                    .logConfig(LogConfig
-                            .logConfig()
+                    .logConfig(LogConfig.logConfig()
                             .blacklistHeaders(List.of("Authorization"))))
             .addFilter(new AllureRestAssured())
             .build();
 
     public static RequestSpecification get() {
-        return REQUEST_SPEC;
+        return new RequestSpecBuilder()
+                .addRequestSpecification(BASE_SPEC)
+                .setBaseUri(Config.getBaseUrl())  // динамически подхватываем актуальный URL
+                .build();
     }
 }

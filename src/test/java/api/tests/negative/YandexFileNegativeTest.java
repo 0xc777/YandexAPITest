@@ -19,7 +19,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class YandexFileNegativeTest {
+public class YandexFileNegativeTest  {
 
     private final FileSteps fileSteps = StepsFactory.getFileSteps();
     private final FolderSteps folderSteps = StepsFactory.getFolderSteps();

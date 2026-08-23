@@ -1,5 +1,6 @@
 package api.tests.negative;
 
+import api.mocks.MockExtension;
 import api.tests.assertions.ErrorConditions;
 import api.tests.assertions.LinkResponseAssertions;
 import api.tests.dto.ErrorResponse;
@@ -15,6 +16,7 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -22,7 +24,7 @@ import java.util.UUID;
 import static api.tests.assertions.ErrorConditions.diskNotFound;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-
+@ExtendWith(MockExtension.class)
 public class YandexFolderNegativeTest {
 
     private final FolderSteps folderSteps = StepsFactory.getFolderSteps();
@@ -30,6 +32,7 @@ public class YandexFolderNegativeTest {
 
     @Test
     @Tag("negative")
+    @Tag("mock")
     @Severity(SeverityLevel.NORMAL)
     @Description("Запрос информации о несуществующей папке 404")
     @DisplayName("Несуществующая папка")
@@ -74,6 +77,7 @@ public class YandexFolderNegativeTest {
 
     @Test
     @Tag("negative")
+    @Tag("mock")
     @Severity(SeverityLevel.NORMAL)
     @Description("Удаление несуществующей папки 404")
     @DisplayName("Удаление несуществующей папки")
@@ -91,6 +95,7 @@ public class YandexFolderNegativeTest {
 
     @Test
     @Tag("negative")
+    @Tag("mock")
     @Severity(SeverityLevel.MINOR)
     @Description("Пустой путь при создании папки 400")
     @DisplayName("Пустой путь при создании папки")
