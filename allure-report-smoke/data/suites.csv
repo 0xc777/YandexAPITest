@@ -1,0 +1,4 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"passed","Sun Aug 23 03:04:32 UTC 2026","Sun Aug 23 03:04:35 UTC 2026","3570","","api.tests.smoketests.YandexSmokeTest","","api.tests.smoketests.YandexSmokeTest","haveAvailableSpace","Общий объем диска больше нуля","Общий объем диска больше нуля"
+"passed","Sun Aug 23 03:04:32 UTC 2026","Sun Aug 23 03:04:35 UTC 2026","3096","","api.tests.smoketests.YandexSmokeTest","","api.tests.smoketests.YandexSmokeTest","authorizeSuccessfully","Получить информацию о диске","Получение информации о диске"
+"passed","Sun Aug 23 03:04:32 UTC 2026","Sun Aug 23 03:04:39 UTC 2026","7283","","api.tests.smoketests.YandexSmokeTest","","api.tests.smoketests.YandexSmokeTest","createAndDeleteFolder","Создание папки на диске","Создание папки на диске"
