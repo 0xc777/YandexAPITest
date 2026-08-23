@@ -26,7 +26,7 @@ public class YandexSmokeTest {
     private final ResourceSteps resourceSteps = StepsFactory.getResourceSteps();
 
     @Test
-    @Tag("Smoke")
+    @Tag("smoke")
     @Severity(SeverityLevel.CRITICAL)
     @Description("Получение информации о диске")
     @DisplayName("Получить информацию о диске")
@@ -41,7 +41,7 @@ public class YandexSmokeTest {
 
     }
     @Test
-    @Tag("Smoke")
+    @Tag("smoke")
     @Severity(SeverityLevel.CRITICAL)
     @Description("Создание папки на диске")
     @DisplayName("Создание папки на диске")
@@ -59,7 +59,7 @@ public class YandexSmokeTest {
         }
     }
     @Test
-    @Tag("Smoke")
+    @Tag("smoke")
     @Severity(SeverityLevel.CRITICAL)
     @Description("Общий объем диска больше нуля")
     @DisplayName("Общий объем диска больше нуля")
