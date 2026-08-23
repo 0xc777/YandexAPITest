@@ -2,7 +2,13 @@
 # 🧪 Автотесты для api Яндекс.Диска
 
 [![CI](https://github.com/0xc777/YandexAPITest/actions/workflows/ci.yml/badge.svg)](https://github.com/0xc777/YandexAPITest/actions/workflows/ci.yml)
-[![Allure Report](https://img.shields.io/badge/Allure_Report-View-1e90ff)](https://0xc777.github.io/YandexAPITest/allure/)
+[![Allure Reports](https://img.shields.io/badge/Allure_Reports-View-1e90ff)](https://0xc777.github.io/YandexAPITest/)
+
+### 📊Allure Reports📊
+- [Главная страница со всеми отчётами](https://0xc777.github.io/YandexAPITest/)
+- [Smoke-тесты](https://0xc777.github.io/YandexAPITest/allure-report-smoke/)
+- [Positive-тесты](https://0xc777.github.io/YandexAPITest/allure-report-positive/)
+- [Negative-тесты](https://0xc777.github.io/YandexAPITest/allure-report-negative/)
 
 **Автотесты для api Яндекс.Диска на Java** с использованием **REST Assured**, **JUnit 5**, **Allure** и **GitHub Actions**.
 
