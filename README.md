@@ -40,7 +40,7 @@ src
             ├── client
             ├── constants
             ├── mocks
-            │   └── WireMock
+            │   └── wiremock
             ├── tests
             │   ├── assertions
             │   ├── dto
