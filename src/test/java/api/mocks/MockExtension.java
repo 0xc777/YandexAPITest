@@ -55,10 +55,9 @@ public class MockExtension implements BeforeEachCallback, AfterEachCallback {
 
     @Override
     public void afterEach(ExtensionContext context) {
-        // Сбрасываем URL и флаг для текущего потока
         if (started.get()) {
             Config.setBaseUrl("https://cloud-api.yandex.net");
-            started.set(false); // сбрасываем только для текущего потока
+            started.set(false);
         }
     }
 }

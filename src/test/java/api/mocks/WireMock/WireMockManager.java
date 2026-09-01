@@ -1,10 +1,8 @@
-package api.mocks.WireMock;
+package api.mocks.wiremock;
 
 
 import api.mocks.MockManager;
 import com.github.tomakehurst.wiremock.WireMockServer;
-
-import java.util.Map;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;

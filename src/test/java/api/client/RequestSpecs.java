@@ -23,7 +23,7 @@ public class RequestSpecs
     public static RequestSpecification get() {
         return new RequestSpecBuilder()
                 .addRequestSpecification(BASE_SPEC)
-                .setBaseUri(Config.getBaseUrl())  // динамически подхватываем актуальный URL
+                .setBaseUri(Config.getBaseUrl())
                 .build();
     }
 }
