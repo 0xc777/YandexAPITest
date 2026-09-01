@@ -34,7 +34,7 @@ public class MockExtension implements BeforeEachCallback, AfterEachCallback {
         }
 
         if (manager == null) {
-            String managerClass = System.getProperty("mock.manager", "api.mocks.WireMock.WireMockManager");
+            String managerClass = System.getProperty("mock.manager", "api.mocks.wiremock.WireMockManager");
             try {
                 manager = (MockManager) Class.forName(managerClass)
                         .getDeclaredConstructor().newInstance();
