@@ -16,7 +16,6 @@ public class MockExtension implements BeforeEachCallback, AfterEachCallback {
 
     @Override
     public void beforeEach(ExtensionContext context) {
-        System.out.println("=== MockExtension: test = " + context.getTestMethod().get().getName());
         boolean globalMockEnabled = Boolean.parseBoolean(System.getProperty("use.mock", "false"));
         if (!globalMockEnabled) {
             return;
@@ -39,7 +38,7 @@ public class MockExtension implements BeforeEachCallback, AfterEachCallback {
                 manager = (MockManager) Class.forName(managerClass)
                         .getDeclaredConstructor().newInstance();
             } catch (Exception e) {
-                throw new RuntimeException("Failed to create mock manager: " + managerClass, e);
+                throw new RuntimeException("Ошибка при создание mock manager: " + managerClass, e);
             }
         }
 
@@ -48,7 +47,6 @@ public class MockExtension implements BeforeEachCallback, AfterEachCallback {
             started.set(true);
             Runtime.getRuntime().addShutdownHook(new Thread(manager::stop));
         }
-
         Config.setBaseUrl("http://localhost:" + manager.getPort());
         manager.registerStubs();
     }

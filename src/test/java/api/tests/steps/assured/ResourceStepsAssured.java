@@ -9,7 +9,8 @@ import java.util.concurrent.TimeUnit;
 
 import static api.client.RequestSpecs.get;
 import static api.constants.Endpoints.*;
-import static api.utils.AsyncOperationHelper.waitForOperationComplete;
+import static api.utils.awaitility.WaitHelper.waitUntil;
+import static api.utils.awaitility.assured.AsyncOperationHelper.waitForOperationComplete;
 import static io.restassured.RestAssured.given;
 import static org.awaitility.Awaitility.await;
 
@@ -43,10 +44,7 @@ public class ResourceStepsAssured implements ResourceSteps {
 
     @Step("Удалить ресурс {resourcePath} (с ожиданием)")
     public void deleteResource(String resourcePath) {
-        await()
-                .atMost(10, TimeUnit.SECONDS)
-                .pollInterval(500, TimeUnit.MILLISECONDS)
-                .until(() -> {
+        waitUntil(() -> {
                     Response response = sendDeleteResource(resourcePath);
                     int statusCode = response.statusCode();
 
@@ -69,10 +67,7 @@ public class ResourceStepsAssured implements ResourceSteps {
 
     @Step("Проверить, что ресурс {resourcePath} НЕ существует")
     public void resourceNotExists(String resourcePath) {  // Не забыть переписать, сделать универсальным, с возвращением Response
-        await()
-                .atMost(10, TimeUnit.SECONDS)
-                .pollInterval(500, TimeUnit.MILLISECONDS)
-                .until(() -> {
+        waitUntil(() -> {
                     return given()
                             .spec(get())
                             .queryParam("path", resourcePath)

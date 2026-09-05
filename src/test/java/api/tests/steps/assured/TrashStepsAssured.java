@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 import static api.client.RequestSpecs.get;
 import static api.constants.Endpoints.*;
-import static api.utils.AsyncOperationHelper.waitForOperationComplete;
+import static api.utils.awaitility.assured.AsyncOperationHelper.waitForOperationComplete;
 import static io.restassured.RestAssured.given;
 import static org.awaitility.Awaitility.await;
 

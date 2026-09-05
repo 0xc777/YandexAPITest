@@ -7,14 +7,13 @@ import io.restassured.response.Response;
 
 
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static api.client.RequestSpecs.get;
 import static api.constants.Endpoints.*;
-import static api.utils.AsyncOperationHelper.waitForOperationComplete;
+import static api.utils.awaitility.WaitHelper.waitUntil;
+import static api.utils.awaitility.assured.AsyncOperationHelper.waitForOperationComplete;
 import static io.restassured.RestAssured.given;
-import static org.awaitility.Awaitility.await;
 
 
 public class FileStepsAssured implements FileSteps {
@@ -58,11 +57,7 @@ public class FileStepsAssured implements FileSteps {
     @Step("Поиск файла{filePath}")
     public Response searchFile(String filePath) {
         AtomicReference<Response> responseRef = new AtomicReference<>();
-
-        await()
-                .atMost(5, TimeUnit.SECONDS)
-                .pollInterval(500, TimeUnit.MILLISECONDS)
-                .until(() -> {
+        waitUntil(() -> {
                     Response response = given()
                             .spec(get())
                             .queryParam("path", filePath)
@@ -85,19 +80,16 @@ public class FileStepsAssured implements FileSteps {
 
     @Step("Проверить, что файл {filePath} НЕ существует")
     public void checkFileNotExists(String filePath) {
-        await()
-                .atMost(5, TimeUnit.SECONDS)
-                .pollInterval(500, TimeUnit.MILLISECONDS)
-                .until(() -> {
-                    return given()
-                            .spec(get())
-                            .queryParam("path", filePath)
-                    .when()
-                            .get(RESOURCES)
-                    .then()
-                            .extract()
-                            .statusCode() == 404;
-                });
+        waitUntil(() ->
+                given()
+                        .spec(get())
+                        .queryParam("path", filePath)
+                .when()
+                        .get(RESOURCES)
+                .then()
+                        .extract()
+                        .statusCode() == 404
+        );
     }
 
     @Step("Загрузить файл из URL {fileUrl} по пути {filePath} (с ожиданием)")
