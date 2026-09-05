@@ -51,6 +51,8 @@ src
             │       ├── assured
             │       └── interfaces
             └── utils
+               └── awaitility
+                   └── assured
 ``` 
 ---
 ## 🛠 Стек технологий
